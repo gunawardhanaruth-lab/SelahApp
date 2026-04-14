@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Mood - Selah</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .mood-card {
+            background: linear-gradient(145deg, #1a0a0a, #0f0505);
+            border: 1px solid rgba(255, 69, 0, 0.15);
+            padding: 3rem 1rem;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mood-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(255, 69, 0, 0.15);
+        }
+
+        .mood-emoji {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .mood-name {
+            font-size: 1.4rem;
+            font-family: 'Playfair Display', serif;
+            color: var(--text-main);
+        }
+
+        .mood-row-2 {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">Selah</a>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="moods.html" class="active">Moods</a>
+        </nav>
+
+        <div class="nav-links" id="nav-auth" style="align-items: center;">
+            <a href="register.html" class="btn-ghost" style="text-transform: uppercase; letter-spacing: 1px;">Join Free</a>
+            <a href="login.html" class="btn-primary">Log In</a>
+        </div>
+    </header>
+
+    <div class="container" style="margin-top: 5rem;">
+        <h1 style="font-size: 4.5rem; line-height: 1.1; margin-bottom: 2rem; max-width: 800px;">How is your <i>spirit</i> today?</h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 500px; line-height: 1.6; margin-bottom: 4rem;">
+            Select a card to reveal your curated scripture and worship. Allow the peace of the sanctuary to guide your heart's current season.
+        </p>
+
+        <!-- Mockup Inspired Mood Mosaic -->
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+            <!-- Single Mood: Joyful -->
+            <a href="dashboard.html?mood=Happy" class="mood-card" style="padding: 3rem; text-align: left; position: relative; min-height: 300px;">
+                <div style="width: 45px; height: 45px; background: rgba(251, 191, 36, 0.1); border: 1px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 3rem;">☀️</div>
+                <h2 style="font-size: 2rem; margin: 0;">Joyful</h2>
+                <div style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px; color: var(--text-muted); margin-top: 0.5rem;">Abundance & Praise</div>
+            </a>
+
+            <!-- Double-Wide Mood: Heavy Hearted (Inspired by mockup 2) -->
+            <a href="dashboard.html?mood=Sad" class="mood-card" style="padding: 3rem; text-align: left; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
+                <div style="width: 45px; height: 45px; background: rgba(234, 88, 12, 0.1); border: 1px solid var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">😌</div>
+                <div style="max-width: 400px; position: relative; z-index: 2;">
+                    <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Heavy Hearted</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Find solace in scriptures of comfort and songs that carry your burdens to the throne.</p>
+                </div>
+                <!-- Mockup Water Drop Shape -->
+                <div style="position: absolute; right: -20px; bottom: -20px; width: 250px; height: 250px; background: #ea580c; opacity: 0.1; border-radius: 50% 0 50% 50%; transform: rotate(-15deg);"></div>
+            </a>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-top: 2rem;">
+             <!-- Double-Wide Mood: At Peace -->
+             <a href="dashboard.html?mood=Peaceful" class="mood-card" style="padding: 3rem; text-align: left; position: relative; overflow: hidden;">
+                <div style="position: absolute; right: 4rem; top: 4rem; width: 50px; height: 50px; background: #fff; opacity: 0.1; border-radius: 50%; display: flex; align-items: center; justify-content: center;">🧘</div>
+                <div style="max-width: 500px;">
+                    <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">At Peace</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Deepen your stillness with contemplative meditation and the gentle whispers of grace.</p>
+                </div>
+            </a>
+
+            <!-- Single Mood: Anxious -->
+            <a href="dashboard.html?mood=Anxious" class="mood-card" style="padding: 3rem; text-align: left; background: #1a0a0a;">
+                <div style="width: 45px; height: 45px; background: rgba(255, 69, 0, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 6rem;">🌊</div>
+                <h2 style="font-size: 2rem; margin: 0;">Anxious</h2>
+                <div style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px; color: var(--text-muted); margin-top: 0.5rem;">Still Waters & Strength</div>
+            </a>
+        </div>
+
+        <!-- Featured Mood: Deep Worship (Inspired by mockup bottom) -->
+        <a href="dashboard.html?mood=Worship" class="mood-card" style="display: flex; justify-content: space-between; align-items: center; padding: 2.5rem 3.5rem; margin-top: 2rem;">
+            <div style="display: flex; align-items: center; gap: 2rem;">
+                <div style="width: 60px; height: 60px; background: #3a2a1a; border-radius: 12px; font-size: 2rem; display: flex; align-items: center; justify-content: center;">✝️</div>
+                <div>
+                    <h2 style="font-size: 2.2rem; margin: 0;">Deep Worship</h2>
+                    <p style="color: var(--text-muted); margin: 0.2rem 0 0 0;">Enter the holy of holies with unhindered adoration.</p>
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <div style="display: flex; gap: -10px; justify-content: flex-end; margin-bottom: 0.5rem;">
+                    <div style="width: 30px; height: 30px; background: #333; border: 2px solid var(--bg-dark); border-radius: 50%; background: url('/api/placeholder/30/30'); background-size: cover;"></div>
+                    <div style="width: 30px; height: 30px; background: #444; border: 2px solid var(--bg-dark); border-radius: 50%; background: url('/api/placeholder/30/30'); background-size: cover; margin-left: -10px;"></div>
+                    <div style="width: 30px; height: 30px; background: var(--accent); border: 2px solid var(--bg-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: #000; font-weight: 800; margin-left: -10px;">+12k</div>
+                </div>
+                <div style="text-transform: uppercase; font-size: 0.6rem; font-weight: 800; color: var(--accent); letter-spacing: 1px;">JOINING NOW</div>
+            </div>
+        </a>
+    </div>
+    <script>
+        async function checkSession() {
+            try {
+                const res = await fetch('/api/me');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.loggedIn) {
+                        document.getElementById('nav-auth').innerHTML = `
+                             <span style="color: var(--text-muted); font-size: 0.9rem;">Shalom, ${data.name}</span>
+                             <a href="#" onclick="logout()" class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Logout</a>
+                        `;
+                    }
+                }
+            } catch (err) { console.log("Not logged in"); }
+        }
+        
+        // Scroll Reveal Logic
+        function reveal() {
+            const reveals = document.querySelectorAll(".reveal");
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("active");
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            reveals.forEach(el => observer.observe(el));
+        }
+
+        async function logout() {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.reload();
+        }
+        checkSession();
+        reveal();
+    </script>
+</body>
+
+</html>

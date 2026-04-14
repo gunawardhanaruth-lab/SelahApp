@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selah - Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .mood-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding: 3rem 4rem;
+            background: linear-gradient(to right, rgba(249, 115, 22, 0.05), transparent);
+            border-left: 8px solid var(--primary);
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .verse-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            padding: 2.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .verse-card::before {
+            content: "“";
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            font-size: 4rem;
+            color: var(--primary);
+            font-family: 'Playfair Display', serif;
+            opacity: 0.5;
+        }
+
+
+        .verse-icon {
+            font-size: 2rem;
+            color: var(--accent);
+            opacity: 0.8;
+        }
+
+        .verse-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        iframe {
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+            border: none;
+            background: #000;
+        }
+
+        /* Locked Verse Styling */
+        .locked-card {
+            position: relative;
+            border: 1px solid rgba(255, 69, 0, 0.3);
+            background: rgba(20, 8, 8, 0.8) !important;
+            overflow: hidden;
+            flex-direction: column !important;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .locked-card:hover {
+            transform: scale(1.02);
+            border-color: var(--primary);
+        }
+
+        .lock-overlay {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        .upsell-badge {
+            margin-top: 1rem;
+        }
+
+        .upsell-badge h3 {
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .upsell-badge p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="aura" id="mood-aura"></div>
+    <header>
+        <a href="index.html" class="logo">Selah</a>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="moods.html">Moods</a>
+            <a href="#" class="active">Dashboard</a>
+        </nav>
+
+        <div class="nav-links" id="user-profile" style="align-items: center;">
+            <!-- Only Logout/Profile info will appear here via JS -->
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="mood-header">
+            <div>
+                <div style="text-transform: uppercase; letter-spacing: 4px; font-size: 0.8rem; color: var(--primary); font-weight: 800; margin-bottom: 0.5rem;">Current State</div>
+                <h1 style="font-size: 4rem; line-height: 1; margin: 0; text-transform: uppercase; letter-spacing: -2px;">Current <br><i>Atmosphere:</i></h1>
+            </div>
+            <div style="text-align: right;">
+                <h2 id="mood-title" style="font-size: 5rem; font-style: italic; color: #fff; opacity: 0.9; line-height: 1; margin: 0;">Peaceful <br>Atmosphere</h2>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 400px; gap: 4rem;">
+
+            <!-- SECTION: Music (Left/Main) -->
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
+                    <h2 style="font-size: 2rem; margin: 0;">Worship <i>Playlist</i></h2>
+                    <div style="display: flex; gap: 1.5rem; align-items: center;" id="playlist-controls">
+                        <a href="#" style="color: var(--accent); text-decoration: none; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px;">VIEW ALL TRACKS</a>
+                    </div>
+                </div>
+                
+                <div class="grid-2" id="playlist-container">
+                    <!-- Dynamic Loading Placeholder -->
+                    <p style="color: var(--text-muted);">Finding your music...</p>
+                </div>
+
+                <!-- Daily Reflection Box Removed as requested -->
+            </div>
+
+            <!-- SECTION: Verses (Right/Sidebar) -->
+            <div>
+                <h2 style="font-size: 1.8rem; margin-bottom: 2rem;">Scripture <i>Focus</i></h2>
+                <div id="verse-container">
+                    <!-- Dynamic Loading Placeholder -->
+                    <p style="color: var(--text-muted);">Searching scripture...</p>
+                </div>
+
+                <!-- Community Card (Inspired by mockup bottom right) -->
+                <div style="margin-top: 3rem; background: rgba(251, 191, 36, 0.03); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: 12px; padding: 2rem;">
+                    <h3 style="font-size: 1rem; margin-bottom: 1rem;">Community Prayer Wall</h3>
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="display: flex; gap: -8px;">
+                            <div style="width: 25px; height: 25px; border-radius: 50%; background: #333; border: 2px solid var(--bg-dark);"></div>
+                            <div style="width: 25px; height: 25px; border-radius: 50%; background: #444; border: 2px solid var(--bg-dark); margin-left: -8px;"></div>
+                            <div style="width: 25px; height: 25px; border-radius: 50%; background: #555; border: 2px solid var(--bg-dark); margin-left: -8px;"></div>
+                        </div>
+                        <div style="background: var(--accent); width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.5rem; font-weight: 800; color: #000; margin-left: -8px;">+15</div>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.7rem;">15 others are meditating on the same atmosphere right now.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadDashboard() {
+            const urlParams = new URL(window.location.href).searchParams;
+            const moodName = urlParams.get('mood') || 'Worship';
+            
+            try {
+                // 1. Fetch Mood Details & Verses
+                const moodRes = await fetch(`/api/moods/${moodName}`);
+                const moodData = await moodRes.json();
+                
+                if (moodData.error) throw new Error(moodData.error);
+
+                const { mood, verses } = moodData;
+
+                // Update UI Header
+                document.getElementById('mood-title').innerText = mood.name + ' Atmosphere';
+
+                // 🌟 Atmospheric Aura Tweak
+                const aura = document.getElementById('mood-aura');
+                if (aura) {
+                    const moodKey = mood.name.toLowerCase();
+                    aura.style.background = `var(--aura-${moodKey})`;
+                }
+
+                // Update Header based on session
+                const profileDiv = document.getElementById('user-profile');
+                if (profileDiv) {
+                    if (moodData.loggedIn) {
+                        profileDiv.innerHTML = `
+                            <span style="color: var(--accent); font-size: 0.9rem; font-weight: 700;">Connected as ${moodData.userName || 'Member'}</span>
+                        `;
+                        
+                        // Add Refresh button for members
+                        const controls = document.getElementById('playlist-controls');
+                        if (controls && !document.getElementById('refresh-btn')) {
+                            controls.innerHTML = `
+                                <a href="#" id="refresh-btn" onclick="refreshPlaylist('${mood.youtube_keywords}'); return false;" 
+                                   style="color: var(--primary); text-decoration: none; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; border: 1px solid var(--primary); padding: 0.4rem 1rem; border-radius: 4px;">REFRESH ATMOSPHERE</a>
+                                ` + controls.innerHTML;
+                        }
+                    } else {
+                        profileDiv.innerHTML = `
+                            <a href="login.html" class="btn-primary" style="padding: 0.5rem 1.2rem; font-size: 0.8rem;">Log In</a>
+                        `;
+                    }
+                }
+
+                // 2. Render Verses (Only for logged in users)
+                const verseContainer = document.getElementById('verse-container');
+                if (verseContainer) {
+                    if (moodData.loggedIn) {
+                        verseContainer.innerHTML = (verses && verses.length > 0) ? verses.map(v => `
+                            <div class="verse-card">
+                                <div>
+                                    <div class="verse-text">"${v.text}"</div>
+                                    <div style="color: var(--primary); font-size: 0.9rem; font-weight: 600;">${v.reference}</div>
+                                </div>
+                            </div>
+                        `).join('') : '<p style="color: var(--text-muted);">No verses found for this journey.</p>';
+                    } else {
+                        // RESTORED LOCK UI
+                        verseContainer.innerHTML = `
+                            <div class="verse-card locked-card" onclick="window.location.href='register.html'" style="cursor: pointer;">
+                                <div class="lock-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; flex-direction:column; z-index:10; background: rgba(8, 8, 8, 0.4); backdrop-filter: blur(2px);">
+                                    <span class="lock-icon" style="font-size: 3rem; animation: pulse 2s infinite;">🔒</span>
+                                    <div style="margin-top: 1rem; text-align: center;">
+                                        <h3 style="color: var(--accent); margin: 0;">Unlock Divine Wisdom</h3>
+                                        <p style="font-size: 0.8rem; color: #fff; margin: 0.5rem 0;">Register to reveal full scripture</p>
+                                        <button class="btn-primary" style="font-size: 0.7rem; padding: 0.4rem 1rem;">Join Selah</button>
+                                    </div>
+                                </div>
+                                <div style="opacity: 0.05; filter: blur(8px); user-select: none;">
+                                    <div class="verse-text">"The Lord is my shepherd, I shall not want. He makes me lie down in green pastures..."</div>
+                                    <div style="color: var(--primary); font-size: 0.9rem; font-weight: 600;">Psalm 23:1</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                // 3. Fetch & Render YouTube Videos (using keywords from DB)
+                const playlistContainer = document.getElementById('playlist-container');
+                const youtubeRes = await fetch(`/api/youtube?q=${encodeURIComponent(mood.youtube_keywords)}`);
+                const youtubeData = await youtubeRes.json();
+
+                if (youtubeData.error) {
+                    playlistContainer.innerHTML = `<p style="color: coral; padding: 1rem; border: 1px dashed;">YouTube Integration: ${youtubeData.error}</p>`;
+                    return;
+                }
+
+                playlistContainer.innerHTML = youtubeData.videos.map(v => `
+                    <div class="music-card">
+                        <iframe src="https://www.youtube.com/embed/${v.id}" title="${v.title}"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                        <div style="padding: 1rem;">
+                            <h3 style="margin: 0; font-size: 1rem; color: #fff;">${v.title}</h3>
+                            <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0.5rem 0 0 0;">${v.channel}</p>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                console.error('Dashboard Error:', err);
+                document.getElementById('mood-title').innerText = 'Journey Interrupted';
+                document.getElementById('playlist-container').innerHTML = `<p style="color: var(--text-muted);">We hit a stone in the path: ${err.message}</p>`;
+            }
+        }
+
+        async function refreshPlaylist(keywords) {
+            const btn = document.getElementById('refresh-btn');
+            const container = document.getElementById('playlist-container');
+            
+            if (btn) btn.innerText = 'REFRESHING...';
+            container.style.opacity = '0.5';
+
+            try {
+                const res = await fetch(`/api/youtube?q=${encodeURIComponent(keywords)}&t=${Date.now()}`); // Cache busting
+                const data = await res.json();
+                
+                if (data.videos) {
+                    container.innerHTML = data.videos.map(v => `
+                        <div class="music-card">
+                            <iframe src="https://www.youtube.com/embed/${v.id}" title="${v.title}"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                            <div style="padding: 1rem;">
+                                <h3 style="margin: 0; font-size: 1rem; color: #fff;">${v.title}</h3>
+                                <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0.5rem 0 0 0;">${v.channel}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) { console.error('Refresh Failed', e); }
+            
+            if (btn) btn.innerText = 'REFRESH ATMOSPHERE';
+            container.style.opacity = '1';
+        }
+
+        async function logout() {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.reload();
+        }
+
+        loadDashboard();
+    </script>
+</body>
+
+</html>

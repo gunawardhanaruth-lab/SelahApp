@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Selah</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Admin Specific Styles */
+        .admin-section {
+            margin-bottom: 3rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .admin-header-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+
+        .chart-placeholder {
+            height: 100px;
+            background: rgba(255, 255, 255, 0.05);
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.3);
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* Mapping Section */
+        .mapping-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .mapping-panel {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .mapping-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        textarea,
+        select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.8rem;
+            color: white;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-family: inherit;
+        }
+
+        .action-btn {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+            color: white;
+            border-radius: 4px;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">Selah<span>.</span></a>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <span
+                style="border: 1px solid var(--text-muted); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem;">Admin
+                User</span>
+        </div>
+    </header>
+
+    <!-- Admin Nav in Wireframe shows distinct tabs but for simplicity (one page) we stack them -->
+    <div
+        style="background: rgba(0,0,0,0.2); padding: 1rem 5%; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 2rem;">
+        <nav style="display: flex; gap: 2rem;">
+            <a href="index.html" class="btn-ghost">Home</a>
+            <a href="#" class="btn-ghost" style="color: white; border-bottom: 2px solid var(--accent);">Admin
+                Dashboard</a>
+        </nav>
+    </div>
+
+    <div class="container">
+
+        <!-- SECTION 1: Usage Statistics -->
+        <section class="admin-section">
+            <h2 class="admin-header-title">Usage Statistics</h2>
+            <div class="stats-grid">
+                <!-- Card 1 -->
+                <div class="stat-card">
+                    <div>Total Users</div>
+                    <div class="stat-value">1,234</div>
+                    <div class="chart-placeholder">[Usage Chart]</div>
+                </div>
+                <!-- Card 2 -->
+                <div class="stat-card">
+                    <div>Mood Selections (This Week)</div>
+                    <div class="stat-value">456</div>
+                    <div class="chart-placeholder">[Activity Chart]</div>
+                </div>
+                <!-- Card 3 -->
+                <div class="stat-card">
+                    <div>Saved Playlists</div>
+                    <div class="stat-value">789</div>
+                    <div class="chart-placeholder">[Growth Chart]</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Manage Mood Categories -->
+        <section class="admin-section">
+            <h2 class="admin-header-title">
+                Manage Mood Categories
+                <button class="btn btn-primary" style="font-size: 0.9rem; padding: 0.5rem 1rem;">+ Add New Mood</button>
+            </h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mood</th>
+                            <th>Emoji</th>
+                            <th>Verses</th>
+                            <th>Music</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Happy</td>
+                            <td>😄</td>
+                            <td>12 verses</td>
+                            <td>8 playlists</td>
+                            <td>
+                                <button class="action-btn">Edit</button>
+                                <button class="action-btn">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Sad</td>
+                            <td>😔</td>
+                            <td>15 verses</td>
+                            <td>10 playlists</td>
+                            <td>
+                                <button class="action-btn">Edit</button>
+                                <button class="action-btn">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Peaceful</td>
+                            <td>😌</td>
+                            <td>10 verses</td>
+                            <td>7 playlists</td>
+                            <td>
+                                <button class="action-btn">Edit</button>
+                                <button class="action-btn">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Anxious</td>
+                            <td>😟</td>
+                            <td>14 verses</td>
+                            <td>9 playlists</td>
+                            <td>
+                                <button class="action-btn">Edit</button>
+                                <button class="action-btn">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Worship</td>
+                            <td>🙏</td>
+                            <td>20 verses</td>
+                            <td>15 playlists</td>
+                            <td>
+                                <button class="action-btn">Edit</button>
+                                <button class="action-btn">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Manage Mood-to-Content Mapping -->
+        <section class="admin-section">
+            <h2 class="admin-header-title">Manage Mood-to-Content Mapping</h2>
+            <div class="mapping-grid">
+                <!-- Bible Verses Panel -->
+                <div class="mapping-panel">
+                    <h3 style="margin-top:0;">Bible Verses Assignment</h3>
+                    <label
+                        style="font-size: 0.9rem; color: var(--text-muted); display:block; margin-bottom: 0.5rem;">Mood
+                        Category</label>
+                    <select>
+                        <option>Select Mood...</option>
+                        <option>Happy</option>
+                        <option>Sad</option>
+                        <option>Anxious</option>
+                    </select>
+
+                    <label
+                        style="font-size: 0.9rem; color: var(--text-muted); display:block; margin-bottom: 0.5rem;">Available
+                        Verses</label>
+                    <textarea rows="5" placeholder="John 3:16 - For God so loved..."></textarea>
+
+                    <button class="btn btn-primary" style="width: 100%;">Update Mapping</button>
+                </div>
+
+                <!-- Music Playlist Panel -->
+                <div class="mapping-panel">
+                    <h3 style="margin-top:0;">Music Playlist Assignment</h3>
+                    <label
+                        style="font-size: 0.9rem; color: var(--text-muted); display:block; margin-bottom: 0.5rem;">Mood
+                        Category</label>
+                    <select>
+                        <option>Select Mood...</option>
+                        <option>Happy</option>
+                        <option>Worship</option>
+                    </select>
+
+                    <label
+                        style="font-size: 0.9rem; color: var(--text-muted); display:block; margin-bottom: 0.5rem;">Available
+                        Playlists</label>
+                    <textarea rows="5" placeholder="Hillsong Worship, Elevation..."></textarea>
+
+                    <button class="btn btn-primary" style="width: 100%;">Update Mapping</button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Selah</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">Selah<span>.</span></a>
+    </header>
+
+    <main class="auth-page">
+        <div class="auth-card register-accent">
+            <div class="auth-header">
+                <h2>Join Selah</h2>
+                <p>Create an account to save your spiritual journey.</p>
+            </div>
+
+            <form id="registerForm" class="auth-form" autocomplete="off">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="name" class="form-input" placeholder="John Doe" 
+                           autocomplete="off" readonly onfocus="this.removeAttribute('readonly');" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" class="form-input" placeholder="you@example.com" 
+                           autocomplete="off" readonly onfocus="this.removeAttribute('readonly');" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="••••••••" 
+                           autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly');" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Begin Journey</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Sign In</a></p>
+                <p style="margin-top: 1rem;"><a href="index.html" style="font-size: 0.8rem; color: var(--text-muted);">← Return Home</a></p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    alert('Registration successful! Please login.');
+                    window.location.href = 'login.html';
+                } else {
+                    alert(data.error);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('An error occurred');
+            }
+        });
+    </script>
+</body>
+
+</html>

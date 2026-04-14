@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Home - Selah</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .welcome-banner {
+            background: linear-gradient(to right, #2a0a0a, #1a0505);
+            border: 1px solid rgba(255, 69, 0, 0.2);
+            padding: 3rem;
+            border-radius: 16px;
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 300px;
+            background: radial-gradient(circle, rgba(255, 69, 0, 0.1) 0%, transparent 70%);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">Selah<span>.</span></a>
+
+        <nav style="display: flex; gap: 2rem; align-items: center;">
+            <a href="user_home.html"
+                style="color: var(--primary); font-weight: 600; border-bottom: 2px solid var(--primary);">Home</a>
+            <a href="moods.html" class="btn-ghost">Moods</a>
+            <a href="dashboard.html" class="btn-ghost">My Dashboard</a>
+            <a href="#" class="btn-ghost">Journal</a>
+        </nav>
+
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <div style="text-align: right; margin-right: 0.5rem;">
+                <div style="font-size: 0.9rem; font-weight: 600;">John Doe</div>
+                <div style="font-size: 0.7rem; color: var(--accent);">Premium Member</div>
+            </div>
+            <div
+                style="width: 40px; height: 40px; background: var(--gradient-fire); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;">
+                JD</div>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <h1 style="margin: 0; font-size: 2.5rem;">Welcome back, John.</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 0.5rem;">"The joy of the Lord is your
+                strength." - Nehemiah 8:10</p>
+            <div style="margin-top: 2rem;">
+                <a href="moods.html" class="btn-primary">Start Daily Worship</a>
+            </div>
+        </div>
+
+        <h2 style="margin-top: 4rem; display: flex; align-items: center; gap: 1rem;">
+            <span>Your Spiritual Tools</span>
+            <span style="height: 1px; background: rgba(255,255,255,0.1); flex-grow: 1;"></span>
+        </h2>
+
+        <!-- Features Grid -->
+        <div class="feature-grid" style="margin-top: 2rem;">
+            <!-- Card 1 -->
+            <a href="moods.html" class="feature-card"
+                style="padding: 2rem; text-decoration: none; color: inherit; display: block;">
+                <div class="feature-box">✨</div>
+                <h3>Mood Check-in</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">How is your heart today? Find content that
+                    speaks to you.</p>
+            </a>
+
+            <!-- Card 2 -->
+            <a href="#" class="feature-card"
+                style="padding: 2rem; text-decoration: none; color: inherit; display: block;">
+                <div class="feature-box">💖</div>
+                <h3>Saved Verses</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Review your favorite scripture and past
+                    reflections.</p>
+            </a>
+
+            <!-- Card 3 -->
+            <a href="http://localhost:8000/feedback.php" class="feature-card"
+                style="padding: 2rem; text-decoration: none; color: inherit; display: block;">
+                <div class="feature-box">📨</div>
+                <h3>Community Feedback</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Share your testimony or suggest new features.
+                </p>
+            </a>
+        </div>
+
+    </main>
+</body>
+
+</html>
