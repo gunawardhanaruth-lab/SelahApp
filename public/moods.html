@@ -124,8 +124,8 @@
             </div>
             <div style="text-align: right;">
                 <div style="display: flex; gap: -10px; justify-content: flex-end; margin-bottom: 0.5rem;">
-                    <div style="width: 30px; height: 30px; background: #333; border: 2px solid var(--bg-dark); border-radius: 50%; background: url('/api/placeholder/30/30'); background-size: cover;"></div>
-                    <div style="width: 30px; height: 30px; background: #444; border: 2px solid var(--bg-dark); border-radius: 50%; background: url('/api/placeholder/30/30'); background-size: cover; margin-left: -10px;"></div>
+                    <div style="width: 30px; height: 30px; border: 2px solid var(--bg-dark); border-radius: 50%; background: #555;"></div>
+                    <div style="width: 30px; height: 30px; border: 2px solid var(--bg-dark); border-radius: 50%; background: #444; margin-left: -10px;"></div>
                     <div style="width: 30px; height: 30px; background: var(--accent); border: 2px solid var(--bg-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: #000; font-weight: 800; margin-left: -10px;">+12k</div>
                 </div>
                 <div style="text-transform: uppercase; font-size: 0.6rem; font-weight: 800; color: var(--accent); letter-spacing: 1px;">JOINING NOW</div>
@@ -138,7 +138,7 @@
                 const res = await fetch('/api/me');
                 if (res.ok) {
                     const data = await res.json();
-                    if (data.loggedIn) {
+                    if (data.loggedIn && data.name) {
                         document.getElementById('nav-auth').innerHTML = `
                              <span style="color: var(--text-muted); font-size: 0.9rem;">Shalom, ${data.name}</span>
                              <a href="#" onclick="logout()" class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Logout</a>

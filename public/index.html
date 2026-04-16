@@ -159,7 +159,7 @@
         <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; font-size: 0.9rem;">
             <a href="#">About Us</a>
             <a href="#">Contact</a>
-            <a href="http://localhost:8000/feedback.php">Feedback</a>
+            <a href="mailto:support@selah.com">Feedback</a>
         </div>
     </footer>
 
@@ -169,10 +169,12 @@
                 const res = await fetch('/api/me');
                 if (res.ok) {
                     const data = await res.json();
-                    document.getElementById('nav-auth').innerHTML = `
-                         <span style="color: var(--text-muted); font-size: 0.9rem;">Shalom, ${data.name}</span>
-                         <a href="moods.html" class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Dashboard</a>
-                    `;
+                    if (data.loggedIn && data.name) {
+                        document.getElementById('nav-auth').innerHTML = `
+                             <span style="color: var(--text-muted); font-size: 0.9rem;">Shalom, ${data.name}</span>
+                             <a href="moods.html" class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Dashboard</a>
+                        `;
+                    }
                 }
             } catch (err) { console.log("Not logged in"); }
         }

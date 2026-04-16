@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -30,7 +30,7 @@
         }
 
         .verse-card::before {
-            content: "“";
+            content: "â€œ";
             position: absolute;
             left: 1rem;
             top: 0;
@@ -189,102 +189,68 @@
             </div>
         </div>
     </div>
-
     <script>
+        let players = [];
+
+        // YouTube IFrame API Setup
+        function onYouTubeIframeAPIReady() {
+            // This function is required by the YT API but we will hook into it dynamically
+        }
+
         async function loadDashboard() {
             const urlParams = new URL(window.location.href).searchParams;
             const moodName = urlParams.get('mood') || 'Worship';
             
             try {
-                // 1. Fetch Mood Details & Verses
                 const moodRes = await fetch(`/api/moods/${moodName}`);
                 const moodData = await moodRes.json();
-                
                 if (moodData.error) throw new Error(moodData.error);
-
                 const { mood, verses } = moodData;
 
-                // Update UI Header
                 document.getElementById('mood-title').innerText = mood.name + ' Atmosphere';
-
-                // 🌟 Atmospheric Aura Tweak
                 const aura = document.getElementById('mood-aura');
-                if (aura) {
-                    const moodKey = mood.name.toLowerCase();
-                    aura.style.background = `var(--aura-${moodKey})`;
-                }
+                if (aura) { aura.style.background = `var(--aura-${mood.name.toLowerCase()})`; }
 
-                // Update Header based on session
                 const profileDiv = document.getElementById('user-profile');
                 if (profileDiv) {
                     if (moodData.loggedIn) {
-                        profileDiv.innerHTML = `
-                            <span style="color: var(--accent); font-size: 0.9rem; font-weight: 700;">Connected as ${moodData.userName || 'Member'}</span>
-                        `;
-                        
-                        // Add Refresh button for members
+                        profileDiv.innerHTML = `<span style="color: var(--accent); font-size: 0.9rem; font-weight: 700;">Connected as ${moodData.userName || 'Member'}</span>`;
                         const controls = document.getElementById('playlist-controls');
                         if (controls && !document.getElementById('refresh-btn')) {
-                            controls.innerHTML = `
-                                <a href="#" id="refresh-btn" onclick="refreshPlaylist('${mood.youtube_keywords}'); return false;" 
-                                   style="color: var(--primary); text-decoration: none; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; border: 1px solid var(--primary); padding: 0.4rem 1rem; border-radius: 4px;">REFRESH ATMOSPHERE</a>
-                                ` + controls.innerHTML;
+                            controls.innerHTML = `<a href="#" id="refresh-btn" onclick="refreshPlaylist('${mood.youtube_keywords}'); return false;" 
+                                   style="color: var(--primary); text-decoration: none; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; border: 1px solid var(--primary); padding: 0.4rem 1rem; border-radius: 4px;">REFRESH ATMOSPHERE</a>` + controls.innerHTML;
                         }
                     } else {
-                        profileDiv.innerHTML = `
-                            <a href="login.html" class="btn-primary" style="padding: 0.5rem 1.2rem; font-size: 0.8rem;">Log In</a>
-                        `;
+                        profileDiv.innerHTML = `<a href="login.html" class="btn-primary" style="padding: 0.5rem 1.2rem; font-size: 0.8rem;">Log In</a>`;
                     }
                 }
 
-                // 2. Render Verses (Only for logged in users)
                 const verseContainer = document.getElementById('verse-container');
-                if (verseContainer) {
-                    if (moodData.loggedIn) {
-                        verseContainer.innerHTML = (verses && verses.length > 0) ? verses.map(v => `
-                            <div class="verse-card">
-                                <div>
-                                    <div class="verse-text">"${v.text}"</div>
-                                    <div style="color: var(--primary); font-size: 0.9rem; font-weight: 600;">${v.reference}</div>
-                                </div>
-                            </div>
-                        `).join('') : '<p style="color: var(--text-muted);">No verses found for this journey.</p>';
-                    } else {
-                        // RESTORED LOCK UI
-                        verseContainer.innerHTML = `
-                            <div class="verse-card locked-card" onclick="window.location.href='register.html'" style="cursor: pointer;">
-                                <div class="lock-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; flex-direction:column; z-index:10; background: rgba(8, 8, 8, 0.4); backdrop-filter: blur(2px);">
-                                    <span class="lock-icon" style="font-size: 3rem; animation: pulse 2s infinite;">🔒</span>
-                                    <div style="margin-top: 1rem; text-align: center;">
-                                        <h3 style="color: var(--accent); margin: 0;">Unlock Divine Wisdom</h3>
-                                        <p style="font-size: 0.8rem; color: #fff; margin: 0.5rem 0;">Register to reveal full scripture</p>
-                                        <button class="btn-primary" style="font-size: 0.7rem; padding: 0.4rem 1rem;">Join Selah</button>
-                                    </div>
-                                </div>
-                                <div style="opacity: 0.05; filter: blur(8px); user-select: none;">
-                                    <div class="verse-text">"The Lord is my shepherd, I shall not want. He makes me lie down in green pastures..."</div>
-                                    <div style="color: var(--primary); font-size: 0.9rem; font-weight: 600;">Psalm 23:1</div>
-                                </div>
-                            </div>
-                        `;
-                    }
+                if (verseContainer && moodData.loggedIn) {
+                    verseContainer.innerHTML = (verses && verses.length > 0) ? verses.map(v => `
+                        <div class="verse-card">
+                            <div class="verse-text">"${v.text}"</div>
+                            <div style="color: var(--primary); font-size: 0.9rem; font-weight: 600;">${v.reference}</div>
+                        </div>
+                    `).join('') : '<p>No verses found.</p>';
+                } else if (verseContainer) {
+                    verseContainer.innerHTML = `<div class="verse-card locked-card" onclick="window.location.href='register.html'"><div class="lock-overlay">ðŸ”’<h3>Unlock Wisdom</h3><p>Register to reveal scripture</p></div></div>`;
                 }
 
-                // 3. Fetch & Render YouTube Videos (using keywords from DB)
-                const playlistContainer = document.getElementById('playlist-container');
-                const youtubeRes = await fetch(`/api/youtube?q=${encodeURIComponent(mood.youtube_keywords)}`);
-                const youtubeData = await youtubeRes.json();
+                renderVideos(mood.youtube_keywords);
+            } catch (err) { console.error('Dashboard Error:', err); }
+        }
 
-                if (youtubeData.error) {
-                    playlistContainer.innerHTML = `<p style="color: coral; padding: 1rem; border: 1px dashed;">YouTube Integration: ${youtubeData.error}</p>`;
-                    return;
-                }
-
-                playlistContainer.innerHTML = youtubeData.videos.map(v => `
+        async function renderVideos(keywords) {
+            const container = document.getElementById('playlist-container');
+            const res = await fetch(`/api/youtube?q=${encodeURIComponent(keywords)}`);
+            const data = await res.json();
+            
+            if (data.videos) {
+                players = []; // Reset players
+                container.innerHTML = data.videos.map((v, i) => `
                     <div class="music-card">
-                        <iframe src="https://www.youtube.com/embed/${v.id}" title="${v.title}"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
+                        <div id="player-${i}"></div>
                         <div style="padding: 1rem;">
                             <h3 style="margin: 0; font-size: 1rem; color: #fff;">${v.title}</h3>
                             <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0.5rem 0 0 0;">${v.channel}</p>
@@ -292,50 +258,47 @@
                     </div>
                 `).join('');
 
-            } catch (err) {
-                console.error('Dashboard Error:', err);
-                document.getElementById('mood-title').innerText = 'Journey Interrupted';
-                document.getElementById('playlist-container').innerHTML = `<p style="color: var(--text-muted);">We hit a stone in the path: ${err.message}</p>`;
+                // Initialize YouTube Players
+                data.videos.forEach((v, i) => {
+                    new YT.Player(`player-${i}`, {
+                        height: '200',
+                        width: '100%',
+                        videoId: v.id,
+                        events: { 'onStateChange': onPlayerStateChange }
+                    });
+                });
+            }
+        }
+
+        function onPlayerStateChange(event) {
+            // If a player starts playing (state code 1)
+            if (event.data === YT.PlayerState.PLAYING) {
+                const currentPlayer = event.target;
+                
+                // Find all existing IFRAMES and pause them if they aren't the current one
+                const allIframes = document.querySelectorAll('iframe');
+                allIframes.forEach(iframe => {
+                    if (iframe !== currentPlayer.getIframe()) {
+                        // Use postMessage to tell other iframes to pause (safe cross-origin way)
+                        iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                });
             }
         }
 
         async function refreshPlaylist(keywords) {
-            const btn = document.getElementById('refresh-btn');
-            const container = document.getElementById('playlist-container');
-            
-            if (btn) btn.innerText = 'REFRESHING...';
-            container.style.opacity = '0.5';
-
-            try {
-                const res = await fetch(`/api/youtube?q=${encodeURIComponent(keywords)}&t=${Date.now()}`); // Cache busting
-                const data = await res.json();
-                
-                if (data.videos) {
-                    container.innerHTML = data.videos.map(v => `
-                        <div class="music-card">
-                            <iframe src="https://www.youtube.com/embed/${v.id}" title="${v.title}"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen></iframe>
-                            <div style="padding: 1rem;">
-                                <h3 style="margin: 0; font-size: 1rem; color: #fff;">${v.title}</h3>
-                                <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0.5rem 0 0 0;">${v.channel}</p>
-                            </div>
-                        </div>
-                    `).join('');
-                }
-            } catch (e) { console.error('Refresh Failed', e); }
-            
-            if (btn) btn.innerText = 'REFRESH ATMOSPHERE';
-            container.style.opacity = '1';
+            document.getElementById('playlist-container').style.opacity = '0.5';
+            await renderVideos(keywords);
+            document.getElementById('playlist-container').style.opacity = '1';
         }
 
-        async function logout() {
-            await fetch('/api/logout', { method: 'POST' });
-            window.location.reload();
-        }
+        // Load YouTube API Script
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
         loadDashboard();
     </script>
 </body>
-
 </html>
