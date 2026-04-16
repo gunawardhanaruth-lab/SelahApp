@@ -50,6 +50,41 @@
             gap: 2rem;
             margin-top: 2rem;
         }
+        /* New Emoji Highlight styles */
+        .emoji-aura {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.22rem;
+            margin-bottom: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .mood-card:hover .emoji-aura {
+            transform: scale(1.15);
+            border-color: var(--accent);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Specific Glows */
+        .aura-joy { box-shadow: 0 0 40px rgba(251, 191, 36, 0.2); border-color: rgba(251, 191, 36, 0.4); }
+        .aura-heavy { box-shadow: 0 0 40px rgba(234, 88, 12, 0.2); border-color: rgba(234, 88, 12, 0.4); }
+        .aura-peace { box-shadow: 0 0 40px rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.3); }
+        .aura-anxious { box-shadow: 0 0 40px rgba(255, 69, 0, 0.2); border-color: rgba(255, 69, 0, 0.4); }
+        .aura-worship { box-shadow: 0 0 40px rgba(255, 215, 0, 0.2); border-color: rgba(255, 215, 0, 0.4); }
+
     </style>
 </head>
 
@@ -78,14 +113,14 @@
         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
             <!-- Single Mood: Joyful -->
             <a href="dashboard.html?mood=Happy" class="mood-card" style="padding: 3rem; text-align: left; position: relative; min-height: 300px;">
-                <div style="width: 45px; height: 45px; background: rgba(251, 191, 36, 0.1); border: 1px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 3rem;">☀️</div>
+                <div class="emoji-aura aura-joy">☀️</div>
                 <h2 style="font-size: 2rem; margin: 0;">Joyful</h2>
                 <div style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px; color: var(--text-muted); margin-top: 0.5rem;">Abundance & Praise</div>
             </a>
 
             <!-- Double-Wide Mood: Heavy Hearted (Inspired by mockup 2) -->
             <a href="dashboard.html?mood=Sad" class="mood-card" style="padding: 3rem; text-align: left; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
-                <div style="width: 45px; height: 45px; background: rgba(234, 88, 12, 0.1); border: 1px solid var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">😌</div>
+                <div class="emoji-aura aura-heavy">😌</div>
                 <div style="max-width: 400px; position: relative; z-index: 2;">
                     <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Heavy Hearted</h2>
                     <p style="color: var(--text-muted); font-size: 0.9rem;">Find solace in scriptures of comfort and songs that carry your burdens to the throne.</p>
@@ -98,7 +133,7 @@
         <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-top: 2rem;">
              <!-- Double-Wide Mood: At Peace -->
              <a href="dashboard.html?mood=Peaceful" class="mood-card" style="padding: 3rem; text-align: left; position: relative; overflow: hidden;">
-                <div style="position: absolute; right: 4rem; top: 4rem; width: 50px; height: 50px; background: #fff; opacity: 0.1; border-radius: 50%; display: flex; align-items: center; justify-content: center;">🧘</div>
+                <div class="emoji-aura aura-peace">🧘</div>
                 <div style="max-width: 500px;">
                     <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">At Peace</h2>
                     <p style="color: var(--text-muted); font-size: 0.9rem;">Deepen your stillness with contemplative meditation and the gentle whispers of grace.</p>
@@ -107,7 +142,7 @@
 
             <!-- Single Mood: Anxious -->
             <a href="dashboard.html?mood=Anxious" class="mood-card" style="padding: 3rem; text-align: left; background: #1a0a0a;">
-                <div style="width: 45px; height: 45px; background: rgba(255, 69, 0, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 6rem;">🌊</div>
+                <div class="emoji-aura aura-anxious">🌊</div>
                 <h2 style="font-size: 2rem; margin: 0;">Anxious</h2>
                 <div style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px; color: var(--text-muted); margin-top: 0.5rem;">Still Waters & Strength</div>
             </a>
@@ -116,7 +151,7 @@
         <!-- Featured Mood: Deep Worship (Inspired by mockup bottom) -->
         <a href="dashboard.html?mood=Worship" class="mood-card" style="display: flex; justify-content: space-between; align-items: center; padding: 2.5rem 3.5rem; margin-top: 2rem;">
             <div style="display: flex; align-items: center; gap: 2rem;">
-                <div style="width: 60px; height: 60px; background: #3a2a1a; border-radius: 12px; font-size: 2rem; display: flex; align-items: center; justify-content: center;">✝️</div>
+                <div class="emoji-aura aura-worship" style="margin-bottom: 0;">✝️</div>
                 <div>
                     <h2 style="font-size: 2.2rem; margin: 0;">Deep Worship</h2>
                     <p style="color: var(--text-muted); margin: 0.2rem 0 0 0;">Enter the holy of holies with unhindered adoration.</p>

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -30,7 +30,7 @@
         }
 
         .verse-card::before {
-            content: "â€œ";
+            content: "\"";
             position: absolute;
             left: 1rem;
             top: 0;
@@ -57,8 +57,37 @@
 
         .grid-2 {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 4rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .mood-header {
+                grid-template-columns: 1fr;
+                padding: 2rem;
+                text-align: center;
+            }
+            
+            #mood-title {
+                font-size: 3rem !important;
+                text-align: center;
+                margin-top: 1rem !important;
+            }
+
+            .hero-title {
+                font-size: 3.5rem !important;
+            }
         }
 
         iframe {
@@ -146,7 +175,7 @@
             </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 400px; gap: 4rem;">
+        <div class="main-layout">
 
             <!-- SECTION: Music (Left/Main) -->
             <div>
@@ -234,7 +263,7 @@
                         </div>
                     `).join('') : '<p>No verses found.</p>';
                 } else if (verseContainer) {
-                    verseContainer.innerHTML = `<div class="verse-card locked-card" onclick="window.location.href='register.html'"><div class="lock-overlay">ðŸ”’<h3>Unlock Wisdom</h3><p>Register to reveal scripture</p></div></div>`;
+                    verseContainer.innerHTML = `<div class="verse-card locked-card" onclick="window.location.href='register.html'"><div class="lock-overlay">🔒<h3>Unlock Wisdom</h3><p>Register to reveal scripture</p></div></div>`;
                 }
 
                 renderVideos(mood.youtube_keywords);
