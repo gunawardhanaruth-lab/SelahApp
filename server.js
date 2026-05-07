@@ -153,6 +153,22 @@ app.post('/api/verses', async (req, res) => {
     res.json({ success: true });
 });
 
+// GET Admin Dashboard Stats
+app.get('/api/admin/stats', async (req, res) => {
+    if (req.session.role !== 'admin') return res.status(403).json({ error: 'Unauthorized' });
+    
+    // Fetch counts from existing tables
+    const { count: userCount } = await db.from('users').select('*', { count: 'exact', head: true });
+    const { count: moodCount } = await db.from('moods').select('*', { count: 'exact', head: true });
+    const { count: verseCount } = await db.from('verses').select('*', { count: 'exact', head: true });
+    
+    res.json({ 
+        users: userCount || 0, 
+        moods: moodCount || 0, 
+        verses: verseCount || 0 
+    });
+});
+
 // 2. Get Data for a Specific Mood (Verses)
 app.get('/api/moods/:idOrName', async (req, res) => {
     const selector = req.params.idOrName;

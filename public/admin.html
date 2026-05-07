@@ -155,21 +155,18 @@
             <div class="stats-grid">
                 <!-- Card 1 -->
                 <div class="stat-card">
-                    <div>Total Users</div>
-                    <div class="stat-value">1,234</div>
-                    <div class="chart-placeholder">[Usage Chart]</div>
+                    <div>Total Registered Users</div>
+                    <div class="stat-value" id="stat-users">...</div>
                 </div>
                 <!-- Card 2 -->
                 <div class="stat-card">
-                    <div>Mood Selections (This Week)</div>
-                    <div class="stat-value">456</div>
-                    <div class="chart-placeholder">[Activity Chart]</div>
+                    <div>Active Mood Categories</div>
+                    <div class="stat-value" id="stat-moods">...</div>
                 </div>
                 <!-- Card 3 -->
                 <div class="stat-card">
-                    <div>Saved Playlists</div>
-                    <div class="stat-value">789</div>
-                    <div class="chart-placeholder">[Growth Chart]</div>
+                    <div>Total Bible Verses</div>
+                    <div class="stat-value" id="stat-verses">...</div>
                 </div>
             </div>
         </section>
@@ -242,6 +239,18 @@
     </div>
     <script src="js/app.js"></script>
     <script>
+        // Dynamically Load Admin Stats
+        async function loadAdminStats() {
+            try {
+                const res = await fetch('/api/admin/stats');
+                if(!res.ok) return;
+                const stats = await res.json();
+                document.getElementById('stat-users').innerText = stats.users;
+                document.getElementById('stat-moods').innerText = stats.moods;
+                document.getElementById('stat-verses').innerText = stats.verses;
+            } catch(e) { console.error('Failed to load stats', e); }
+        }
+
         // Dynamically Load Moods from API
         async function loadAdminMoods() {
             const tbody = document.getElementById('admin-mood-list');
@@ -353,7 +362,10 @@
         }
 
         // Load the data immediately when the page opens
-        document.addEventListener('DOMContentLoaded', loadAdminMoods);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAdminMoods();
+            loadAdminStats();
+        });
     </script>
 </body>
 
