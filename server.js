@@ -115,6 +115,25 @@ app.get('/api/moods', async (req, res) => {
     res.json(data || []);
 });
 
+// CREATE New Mood (Admin)
+app.post('/api/moods', async (req, res) => {
+    if (req.session.role !== 'admin') return res.status(403).json({ error: 'Unauthorized' });
+    const { name, emoji, youtube_keywords } = req.body;
+    if (!name || !emoji) return res.status(400).json({ error: 'Missing fields' });
+    
+    const { data, error } = await db.from('moods').insert([{ name, emoji, youtube_keywords: youtube_keywords || name }]).select();
+    if (error) return res.status(500).json({ error: 'Database error' });
+    res.json(data[0]);
+});
+
+// DELETE Mood (Admin)
+app.delete('/api/moods/:id', async (req, res) => {
+    if (req.session.role !== 'admin') return res.status(403).json({ error: 'Unauthorized' });
+    const { error } = await db.from('moods').delete().eq('id', req.params.id);
+    if (error) return res.status(500).json({ error: 'Database error' });
+    res.json({ success: true });
+});
+
 // 2. Get Data for a Specific Mood (Verses)
 app.get('/api/moods/:idOrName', async (req, res) => {
     const selector = req.params.idOrName;

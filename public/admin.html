@@ -178,7 +178,7 @@
         <section class="admin-section">
             <h2 class="admin-header-title">
                 Manage Mood Categories
-                <button class="btn btn-primary" style="font-size: 0.9rem; padding: 0.5rem 1rem;">+ Add New Mood</button>
+                <button class="btn btn-primary" onclick="addNewMood()" style="font-size: 0.9rem; padding: 0.5rem 1rem;">+ Add New Mood</button>
             </h2>
             <div style="overflow-x: auto;">
                 <table>
@@ -186,62 +186,12 @@
                         <tr>
                             <th>Mood</th>
                             <th>Emoji</th>
-                            <th>Verses</th>
-                            <th>Music</th>
+                            <th>YouTube Keyword</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>Happy</td>
-                            <td>😄</td>
-                            <td>12 verses</td>
-                            <td>8 playlists</td>
-                            <td>
-                                <button class="action-btn">Edit</button>
-                                <button class="action-btn">Delete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Sad</td>
-                            <td>😔</td>
-                            <td>15 verses</td>
-                            <td>10 playlists</td>
-                            <td>
-                                <button class="action-btn">Edit</button>
-                                <button class="action-btn">Delete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Peaceful</td>
-                            <td>😌</td>
-                            <td>10 verses</td>
-                            <td>7 playlists</td>
-                            <td>
-                                <button class="action-btn">Edit</button>
-                                <button class="action-btn">Delete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Anxious</td>
-                            <td>😟</td>
-                            <td>14 verses</td>
-                            <td>9 playlists</td>
-                            <td>
-                                <button class="action-btn">Edit</button>
-                                <button class="action-btn">Delete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Worship</td>
-                            <td>🙏</td>
-                            <td>20 verses</td>
-                            <td>15 playlists</td>
-                            <td>
-                                <button class="action-btn">Edit</button>
-                                <button class="action-btn">Delete</button>
-                            </td>
-                        </tr>
+                    <tbody id="admin-mood-list">
+                        <!-- Filled by Javascript dynamically -->
                     </tbody>
                 </table>
             </div>
@@ -296,6 +246,66 @@
 
     </div>
     <script src="js/app.js"></script>
+    <script>
+        // Dynamically Load Moods from API
+        async function loadAdminMoods() {
+            const tbody = document.getElementById('admin-mood-list');
+            if(!tbody) return;
+            try {
+                const res = await fetch('/api/moods');
+                const moods = await res.json();
+                tbody.innerHTML = moods.map(m => `
+                    <tr>
+                        <td>${m.name}</td>
+                        <td>${m.emoji}</td>
+                        <td><span style="color:var(--text-muted); font-size:0.8rem;">${m.youtube_keywords || m.name}</span></td>
+                        <td>
+                            <button class="action-btn" onclick="deleteMood(${m.id})" style="border-color: rgba(255, 69, 0, 0.4); color: #ff4500;">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch(e) { console.error('Failed to load moods', e); }
+        }
+
+        // Add a New Mood via Prompt
+        async function addNewMood() {
+            const name = prompt("1. Enter Mood Name (e.g. Hopeful):");
+            if (!name) return;
+            const emoji = prompt("2. Enter Emoji for this mood (e.g. 🌟):");
+            if (!emoji) return;
+            const keywords = prompt("3. Enter YouTube Search Keyword (e.g. Hopeful Worship Music):", name + " worship music");
+            
+            try {
+                const res = await fetch('/api/moods', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ name, emoji, youtube_keywords: keywords })
+                });
+                if(res.ok) {
+                    alert("✅ Mood successfully added to the database!");
+                    loadAdminMoods(); // Refresh the table
+                } else {
+                    alert("❌ Failed to add mood. Please make sure you are logged in as Admin.");
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        // Delete a Mood
+        async function deleteMood(id) {
+            if(!confirm("⚠️ Are you sure you want to delete this mood? This action cannot be undone.")) return;
+            try {
+                const res = await fetch(`/api/moods/${id}`, { method: 'DELETE' });
+                if(res.ok) {
+                    loadAdminMoods(); // Refresh the table
+                } else {
+                    alert("❌ Failed to delete mood.");
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        // Load the data immediately when the page opens
+        document.addEventListener('DOMContentLoaded', loadAdminMoods);
+    </script>
 </body>
 
 </html>
