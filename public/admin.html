@@ -203,43 +203,38 @@
             <div class="mapping-grid">
                 <!-- Bible Verses Panel -->
                 <div class="mapping-panel">
-                    <h3 style="margin-top:0;">Bible Verses Assignment</h3>
+                    <h3 style="margin-top:0;">Add a Bible Verse to a Mood</h3>
                     <label
-                        style="font-size: 0.9rem; color: var(--text-muted); display:block; margin-bottom: 0.5rem;">Mood
-                        Category</label>
-                    <select>
-                        <option>Select Mood...</option>
-                        <option>Happy</option>
-                        <option>Sad</option>
-                        <option>Anxious</option>
+                        style="font-size: 0.9rem; color: var(--text-muted); display:block; margin-bottom: 0.5rem;">Mood Category</label>
+                    <select id="verse-mood-select">
+                        <option value="">Select Mood...</option>
                     </select>
 
                     <label
-                        style="font-size: 0.9rem; color: var(--text-muted); display:block; margin-bottom: 0.5rem;">Available
-                        Verses</label>
-                    <textarea rows="5" placeholder="John 3:16 - For God so loved..."></textarea>
+                        style="font-size: 0.9rem; color: var(--text-muted); display:block; margin-bottom: 0.5rem;">Verse Reference (e.g. John 3:16)</label>
+                    <input type="text" id="verse-ref-input" style="width: 100%; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.8rem; color: white; border-radius: 6px; margin-bottom: 1rem; font-family: inherit;" placeholder="John 3:16" />
 
-                    <button class="btn btn-primary" style="width: 100%;">Update Mapping</button>
+                    <label
+                        style="font-size: 0.9rem; color: var(--text-muted); display:block; margin-bottom: 0.5rem;">Verse Text</label>
+                    <textarea id="verse-text-input" rows="4" placeholder="For God so loved the world..."></textarea>
+
+                    <button class="btn btn-primary" onclick="addVerseMapping()" style="width: 100%;">Add Verse</button>
                 </div>
 
                 <!-- Music Playlist Panel -->
                 <div class="mapping-panel">
-                    <h3 style="margin-top:0;">Music Playlist Assignment</h3>
+                    <h3 style="margin-top:0;">Update YouTube Keyword Mapping</h3>
                     <label
-                        style="font-size: 0.9rem; color: var(--text-muted); display:block; margin-bottom: 0.5rem;">Mood
-                        Category</label>
-                    <select>
-                        <option>Select Mood...</option>
-                        <option>Happy</option>
-                        <option>Worship</option>
+                        style="font-size: 0.9rem; color: var(--text-muted); display:block; margin-bottom: 0.5rem;">Mood Category</label>
+                    <select id="music-mood-select">
+                        <option value="">Select Mood...</option>
                     </select>
 
                     <label
-                        style="font-size: 0.9rem; color: var(--text-muted); display:block; margin-bottom: 0.5rem;">Available
-                        Playlists</label>
-                    <textarea rows="5" placeholder="Hillsong Worship, Elevation..."></textarea>
+                        style="font-size: 0.9rem; color: var(--text-muted); display:block; margin-bottom: 0.5rem;">YouTube Search Keyword</label>
+                    <textarea id="music-keyword-input" rows="2" placeholder="e.g. Hillsong Worship Music"></textarea>
 
-                    <button class="btn btn-primary" style="width: 100%;">Update Mapping</button>
+                    <button class="btn btn-primary" onclick="updateMusicMapping()" style="width: 100%;">Update Keyword</button>
                 </div>
             </div>
         </section>
@@ -250,10 +245,15 @@
         // Dynamically Load Moods from API
         async function loadAdminMoods() {
             const tbody = document.getElementById('admin-mood-list');
+            const vSelect = document.getElementById('verse-mood-select');
+            const mSelect = document.getElementById('music-mood-select');
+            
             if(!tbody) return;
             try {
                 const res = await fetch('/api/moods');
                 const moods = await res.json();
+                
+                // Populate Table
                 tbody.innerHTML = moods.map(m => `
                     <tr>
                         <td>${m.name}</td>
@@ -264,6 +264,12 @@
                         </td>
                     </tr>
                 `).join('');
+
+                // Populate Selects
+                const options = `<option value="">Select Mood...</option>` + moods.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+                if(vSelect) vSelect.innerHTML = options;
+                if(mSelect) mSelect.innerHTML = options;
+
             } catch(e) { console.error('Failed to load moods', e); }
         }
 
@@ -300,6 +306,49 @@
                 } else {
                     alert("❌ Failed to delete mood.");
                 }
+            } catch(e) { console.error(e); }
+        }
+
+        // Add Verse
+        async function addVerseMapping() {
+            const mood_id = document.getElementById('verse-mood-select').value;
+            const reference = document.getElementById('verse-ref-input').value;
+            const text = document.getElementById('verse-text-input').value;
+            
+            if(!mood_id || !reference || !text) return alert("Please fill all fields!");
+            
+            try {
+                const res = await fetch('/api/verses', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ mood_id, reference, text })
+                });
+                if(res.ok) {
+                    alert("✅ Verse successfully added to mood!");
+                    document.getElementById('verse-ref-input').value = '';
+                    document.getElementById('verse-text-input').value = '';
+                } else alert("❌ Failed to add verse.");
+            } catch(e) { console.error(e); }
+        }
+
+        // Update Keyword
+        async function updateMusicMapping() {
+            const mood_id = document.getElementById('music-mood-select').value;
+            const youtube_keywords = document.getElementById('music-keyword-input').value;
+            
+            if(!mood_id || !youtube_keywords) return alert("Please select a mood and enter a keyword!");
+            
+            try {
+                const res = await fetch(`/api/moods/${mood_id}/keywords`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ youtube_keywords })
+                });
+                if(res.ok) {
+                    alert("✅ YouTube Keyword successfully updated!");
+                    loadAdminMoods(); // Refresh table
+                    document.getElementById('music-keyword-input').value = '';
+                } else alert("❌ Failed to update keyword.");
             } catch(e) { console.error(e); }
         }
 

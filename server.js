@@ -134,6 +134,25 @@ app.delete('/api/moods/:id', async (req, res) => {
     res.json({ success: true });
 });
 
+// UPDATE Mood Keywords (Admin)
+app.put('/api/moods/:id/keywords', async (req, res) => {
+    if (req.session.role !== 'admin') return res.status(403).json({ error: 'Unauthorized' });
+    const { youtube_keywords } = req.body;
+    const { error } = await db.from('moods').update({ youtube_keywords }).eq('id', req.params.id);
+    if (error) return res.status(500).json({ error: 'Database error' });
+    res.json({ success: true });
+});
+
+// ADD Verse to Mood (Admin)
+app.post('/api/verses', async (req, res) => {
+    if (req.session.role !== 'admin') return res.status(403).json({ error: 'Unauthorized' });
+    const { mood_id, reference, text } = req.body;
+    if (!mood_id || !reference || !text) return res.status(400).json({ error: 'Missing fields' });
+    const { error } = await db.from('verses').insert([{ mood_id, reference, text }]);
+    if (error) return res.status(500).json({ error: 'Database error' });
+    res.json({ success: true });
+});
+
 // 2. Get Data for a Specific Mood (Verses)
 app.get('/api/moods/:idOrName', async (req, res) => {
     const selector = req.params.idOrName;
