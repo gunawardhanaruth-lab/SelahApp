@@ -166,6 +166,15 @@
                 <div style="text-transform: uppercase; font-size: 0.6rem; font-weight: 800; color: var(--accent); letter-spacing: 1px;">JOINING NOW</div>
             </div>
         </a>
+
+        <!-- Dynamic Moods from Database -->
+        <div style="margin-top: 5rem; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <h2 style="text-align: center; font-size: 2rem; color: var(--text-muted); margin-bottom: 0.5rem;">Explore All Moods</h2>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">Dynamically loaded from your Supabase database</p>
+            <div id="dynamic-mood-grid" class="mood-grid">
+                <!-- Javascript will load the new admin moods here -->
+            </div>
+        </div>
     </div>
     <script>
         async function checkSession() {
@@ -197,11 +206,27 @@
             reveals.forEach(el => observer.observe(el));
         }
 
+        async function loadDynamicMoods() {
+            try {
+                const res = await fetch('/api/moods');
+                if(!res.ok) return;
+                const moods = await res.json();
+                const grid = document.getElementById('dynamic-mood-grid');
+                grid.innerHTML = moods.map(mood => `
+                    <a href="dashboard.html?mood_id=${mood.id}" class="mood-card" style="padding: 2rem 1rem;">
+                        <div class="mood-emoji" style="font-size: 3rem;">${mood.emoji}</div>
+                        <div class="mood-name" style="font-size: 1.2rem;">${mood.name}</div>
+                    </a>
+                `).join('');
+            } catch(e) { console.error('Failed to load dynamic moods', e); }
+        }
+
         async function logout() {
             await fetch('/api/logout', { method: 'POST' });
             window.location.reload();
         }
         checkSession();
+        loadDynamicMoods();
         reveal();
     </script>
 </body>

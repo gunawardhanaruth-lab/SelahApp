@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- DASHBOARD MOOD LOGIC ---
     const dashboardTitle = document.getElementById('dashboard-title');
     if (dashboardTitle) {
-        const moodId = getQueryParam('mood_id');
+        const moodId = getQueryParam('mood_id') || getQueryParam('mood');
         if (!moodId) {
             window.location.href = 'moods.html';
             return;
